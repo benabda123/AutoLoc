@@ -4,10 +4,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import tn.esprit.autoloc.domain.Client;
 import tn.esprit.autoloc.service.IClientService;
+import tn.esprit.autoloc.web.dto.ClientDTO;
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class ClientController {
     @Operation(summary = "Récupérer la liste complète des clients", description = "Retourne tous les clients enregistrés en base de données.")
     @ApiResponse(responseCode = "200", description = "Liste des clients récupérée avec succès")
     @GetMapping("/retrieve-all-clients")
-    public List<Client> getClients() {
+    public List<ClientDTO> getClients() {
         return clientService.retrieveAllClients();
     }
 
@@ -32,22 +33,15 @@ public class ClientController {
             @ApiResponse(responseCode = "404", description = "Client non trouvé")
     })
     @GetMapping("/retrieve-client/{client-id}")
-    public Client retrieveClient(@PathVariable("client-id") Long clientId) {
+    public ClientDTO retrieveClient(@PathVariable("client-id") Long clientId) {
         return clientService.retrieveClient(clientId);
     }
 
     @Operation(summary = "Ajouter un nouveau client", description = "Enregistre un nouveau client dans le système.")
     @ApiResponse(responseCode = "201", description = "Client créé avec succès")
     @PostMapping("/add-client")
-    public Client addClient(@RequestBody Client c) {
-        return clientService.addClient(c);
-    }
-
-    @Operation(summary = "Ajouter une liste de clients", description = "Enregistre plusieurs clients en une seule requête.")
-    @ApiResponse(responseCode = "201", description = "Clients créés avec succès")
-    @PostMapping("/add-clients")
-    public List<Client> addClients(@RequestBody List<Client> clients) {
-        return clientService.addClients(clients);
+    public ClientDTO addClient(@Valid @RequestBody ClientDTO clientDTO) {
+        return clientService.addClient(clientDTO);
     }
 
     @Operation(summary = "Supprimer un client par son ID")
@@ -63,7 +57,7 @@ public class ClientController {
     @Operation(summary = "Mettre à jour un client existant")
     @ApiResponse(responseCode = "200", description = "Client mis à jour avec succès")
     @PutMapping("/update-client")
-    public Client updateClient(@RequestBody Client c) {
-        return clientService.updateClient(c);
+    public ClientDTO updateClient(@Valid @RequestBody ClientDTO clientDTO) {
+        return clientService.updateClient(clientDTO);
     }
 }

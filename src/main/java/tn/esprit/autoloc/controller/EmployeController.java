@@ -1,9 +1,10 @@
 package tn.esprit.autoloc.controller;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import tn.esprit.autoloc.domain.Employe;
 import tn.esprit.autoloc.service.IEmployeService;
+import tn.esprit.autoloc.web.dto.EmployeDTO;
 
 import java.util.List;
 
@@ -15,18 +16,18 @@ public class EmployeController {
     private final IEmployeService employeService;
 
     @GetMapping("/retrieve-all-employes")
-    public List<Employe> getEmployes() {
+    public List<EmployeDTO> getEmployes() {
         return employeService.retrieveAllEmployes();
     }
 
     @GetMapping("/retrieve-employe/{employe-id}")
-    public Employe retrieveEmploye(@PathVariable("employe-id") Long employeId) {
+    public EmployeDTO retrieveEmploye(@PathVariable("employe-id") Long employeId) {
         return employeService.retrieveEmploye(employeId);
     }
 
     @PostMapping("/add-employe")
-    public Employe addEmploye(@RequestBody Employe e) {
-        return employeService.addEmploye(e);
+    public EmployeDTO addEmploye(@Valid @RequestBody EmployeDTO employeDTO) {
+        return employeService.addEmploye(employeDTO);
     }
 
     @DeleteMapping("/remove-employe/{employe-id}")
@@ -35,7 +36,7 @@ public class EmployeController {
     }
 
     @PutMapping("/update-employe")
-    public Employe updateEmploye(@RequestBody Employe e) {
-        return employeService.updateEmploye(e);
+    public EmployeDTO updateEmploye(@Valid @RequestBody EmployeDTO employeDTO) {
+        return employeService.updateEmploye(employeDTO);
     }
 }
